@@ -3,7 +3,7 @@ import { profile } from '../data/profile';
 
 export const about: Command = {
   name: 'about',
-  description: 'Short intro — who I am and what I build.',
+  description: 'Short intro - who I am and what I build.',
   aliases: ['whoami', 'me'],
   run: () => ({
     kind: 'output',

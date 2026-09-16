@@ -1,7 +1,7 @@
 # nick-portfolio
 
 My portfolio, built as a terminal. Visitors land on a boot screen and type
-commands — `/about`, `/projects`, `/contact` — to get around.
+commands (`/about`, `/projects`, `/contact`) to get around.
 
 Green on black, VT323 for the banner, a blinking block cursor, light CRT
 scanlines. React + TypeScript on Vite, deployed on Vercel.
@@ -26,7 +26,7 @@ vercel.json             build + SPA rewrite + asset caching
 src/
   main.tsx              mounts the app, imports the three stylesheets
   types.ts              Command contract + every content shape
-  data/                 ALL CONTENT LIVES HERE — see below
+  data/                 ALL CONTENT LIVES HERE - see below
   commands/             one file per command, plus index.ts (the registry)
   components/           Terminal, banner, prompt line, user-id badge
     blocks/             reusable output pieces (project card, timeline, links)
@@ -37,7 +37,7 @@ src/
 ## Editing content
 
 Content is entirely separate from UI. To change what the site says, edit a
-file in `src/data/` — you never need to open a component.
+file in `src/data/`. You never need to open a component.
 
 | File | Holds |
 | --- | --- |
@@ -84,7 +84,7 @@ Adding a command is one new file plus one line in the registry.
 
 A handler returns `{ kind: 'output', node }` to print something,
 `{ kind: 'clear' }` to wipe the screen, or `{ kind: 'none' }` to print nothing.
-Commands return React nodes, not strings, so output uses real markup — real
+Commands return React nodes, not strings, so output uses real markup: real
 `<a>` elements that tab and open normally, real headings and lists.
 
 Input handling is shared, so a new command automatically gets Tab completion,
@@ -101,7 +101,7 @@ leading slash: `/hello` works, `hello` does not.
   7:1.
 - The boot typewriter is skipped by any keypress or tap, and disabled entirely
   under `prefers-reduced-motion`. CRT scanlines are static and never animate.
-- Autofocus only happens where there's a real keyboard — on touch devices,
+- Autofocus only happens where there's a real keyboard. On touch devices,
   tapping opens the keyboard instead.
 
 ## Dependencies

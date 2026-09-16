@@ -40,7 +40,7 @@ export default function Banner() {
       {done && (
         <p className="banner-cta">
           Type <code>/help</code> and press Enter to see every command
-          {' — '}or tap one below.
+          {', '}or tap one below.
         </p>
       )}
     </header>

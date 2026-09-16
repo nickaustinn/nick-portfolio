@@ -11,7 +11,7 @@ export function listCommands({ commands }: CommandContext): CommandResult {
     kind: 'output',
     node: (
       <>
-        <p className="muted">Available commands — type one.</p>
+        <p className="muted">Available commands: type one.</p>
         <HelpTable commands={commands.filter((c) => !c.hidden)} />
       </>
     ),

@@ -6,7 +6,7 @@ export const profile = {
   /** Shown by /about, one <p> per entry. */
   about: [
     "I'm a senior Computer Science student at the University of the Pacific, " +
-      'with a minor in Data Science. I work across the full stack — from system ' +
+      'with a minor in Data Science. I work across the full stack, from system ' +
       'architecture down to the details of a polished user experience.',
     "I'm drawn to building real, usable things: a full-stack web app, a machine " +
       'learning model, a game you steer with your eyes. Alongside coursework ' +

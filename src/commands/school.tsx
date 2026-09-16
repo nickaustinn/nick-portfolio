@@ -4,7 +4,7 @@ import Timeline from '../components/blocks/Timeline';
 
 export const school: Command = {
   name: 'school',
-  description: 'Education — where I studied and what I studied.',
+  description: 'Education - where I studied and what I studied.',
   aliases: ['education', 'edu'],
   run: () => ({
     kind: 'output',

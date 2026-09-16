@@ -21,7 +21,7 @@ export const projects: Project[] = [
     slug: 'a-way-out',
     name: 'A Way Out',
     description:
-      'A 2D platformer built collaboratively in Java on a full Agile process — ' +
+      'A 2D platformer built collaboratively in Java on a full Agile process: ' +
       'use case diagrams, user stories, and prototypes before any game code.',
     tech: ['Java', 'Agile', 'Scrum', 'OOP'],
     liveUrl: null,
@@ -29,7 +29,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'earlo',
-    name: 'EaRLO — Eye am Rocket Look-Out!',
+    name: 'EaRLO - Eye am Rocket Look-Out!',
     description:
       'An eye-tracking asteroid-dodging game in Java. Real eye-tracking hardware ' +
       'lets players steer the cursor with their gaze while dodging asteroids.',
