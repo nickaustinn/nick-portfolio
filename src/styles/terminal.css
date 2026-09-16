@@ -465,6 +465,16 @@ strong {
   gap: 0 2ch;
 }
 
+/* ---- /resume --------------------------------------------------------- */
+
+/* The two actions sit on one row and wrap together on a narrow screen. The
+   gap is what separates them, so the bracketed labels stay whole. */
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
+}
+
 /* ---- /commands listing ---------------------------------------------------- */
 
 .help-table {

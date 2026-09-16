@@ -1,42 +1,36 @@
 import type { Command } from '../types';
-import { contactLinks, resumeUrl } from '../data/contact';
-import LinkList from '../components/blocks/LinkList';
+import { RESUME_DOWNLOAD_NAME, resumeUrl } from '../data/contact';
 
+/**
+ * Opens the PDF in a new tab and prints the links as well.
+ *
+ * The window.open call runs inside the keydown handler that submitted the
+ * command, so it counts as a user gesture and a popup blocker normally lets
+ * it through. When one doesn't, the printed links are the way out: the same
+ * two actions, one click away, rather than a command that silently did
+ * nothing.
+ */
 export const resume: Command = {
   name: 'resume',
   description: 'Open my resume (PDF).',
   aliases: ['cv'],
   run: () => {
-    // No file posted yet: say so and hand over something useful instead of
-    // opening a 404.
-    if (!resumeUrl) {
-      return {
-        kind: 'output',
-        node: (
-          <>
-            <p>My resume isn&rsquo;t posted here yet.</p>
-            <p className="muted">
-              LinkedIn has the same history, and I&rsquo;ll send a PDF on request:
-            </p>
-            <LinkList
-              links={contactLinks.filter((link) => link.label !== 'GitHub')}
-            />
-          </>
-        ),
-      };
-    }
+    window.open(resumeUrl, '_blank', 'noopener,noreferrer');
 
     return {
       kind: 'output',
       node: (
-        <p>
-          <a className="link" href={resumeUrl} target="_blank" rel="noopener noreferrer">
-            Open resume (PDF)
-          </a>{' '}
-          <a className="link" href={resumeUrl} download>
-            Download
-          </a>
-        </p>
+        <>
+          <p className="muted">opening resume...</p>
+          <p className="resume-actions">
+            <a className="link" href={resumeUrl} target="_blank" rel="noopener noreferrer">
+              [view resume]
+            </a>
+            <a className="link" href={resumeUrl} download={RESUME_DOWNLOAD_NAME}>
+              [download]
+            </a>
+          </p>
+        </>
       ),
     };
   },
