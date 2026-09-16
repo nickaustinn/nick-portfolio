@@ -1,24 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { KeyboardEvent, MouseEvent, ReactNode } from 'react';
-import { commands, resolveCommand } from '../commands';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { commands, completionNames, resolveCommand } from '../commands';
 import { useCommandHistory } from '../hooks/useCommandHistory';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import OutputLine, { type Entry } from './OutputLine';
-import Prompt from './Prompt';
+import TerminalInput from './TerminalInput';
+import MobileShortcuts from './MobileShortcuts';
+import Banner from './Banner';
 
-const WELCOME: ReactNode = (
-  <>
-    <p>
-      <strong>Nick Austin</strong> — portfolio, as a terminal.
-    </p>
-    <p className="muted">
-      Type <code>/help</code> and press Enter to see what you can do.
-    </p>
-  </>
-);
+const bootEntry = (): Entry => ({ id: 0, node: <Banner /> });
 
 export default function Terminal() {
-  const [entries, setEntries] = useState<Entry[]>([{ id: 0, node: WELCOME }]);
+  const [entries, setEntries] = useState<Entry[]>(() => [bootEntry()]);
   const [value, setValue] = useState('');
 
   const nextId = useRef(1);
@@ -32,7 +25,7 @@ export default function Terminal() {
     setEntries((prev) => [...prev, { id: nextId.current++, ...entry }]);
   }, []);
 
-  const submit = useCallback(
+  const run = useCallback(
     (raw: string) => {
       const trimmed = raw.trim();
       setValue('');
@@ -77,12 +70,21 @@ export default function Terminal() {
     [append, history],
   );
 
+  /** A tapped shortcut chip behaves exactly like typing the command. */
+  const runFromShortcut = useCallback(
+    (name: string) => {
+      run(`/${name}`);
+      inputRef.current?.focus();
+    },
+    [run],
+  );
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       switch (event.key) {
         case 'Enter':
           event.preventDefault();
-          submit(value);
+          run(value);
           return;
 
         case 'ArrowUp': {
@@ -117,7 +119,7 @@ export default function Terminal() {
           return;
       }
     },
-    [append, complete, history, submit, value],
+    [append, complete, history, run, value],
   );
 
   // Clicking the page focuses the input — except when the click was meant for
@@ -132,49 +134,41 @@ export default function Terminal() {
     bottomRef.current?.scrollIntoView({ block: 'end' });
   }, [entries]);
 
+  // Focus on load only where there is a real keyboard. Auto-focusing on a
+  // phone throws up the on-screen keyboard before the visitor has read a
+  // word; there, tapping the screen opens it.
   useEffect(() => {
-    inputRef.current?.focus();
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      inputRef.current?.focus();
+    }
   }, []);
 
   return (
     <div className="terminal" onClick={focusInput}>
-      <main
-        className="terminal-screen"
-        role="log"
-        aria-live="polite"
-        aria-label="Terminal output"
-      >
-        {entries.map((entry) => (
-          <OutputLine key={entry.id} entry={entry} />
-        ))}
-
-        <div className="input-line">
-          <label className="visually-hidden" htmlFor="terminal-input">
-            Enter a command
-          </label>
-          <Prompt />
-          <input
-            id="terminal-input"
-            ref={inputRef}
-            className="input"
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            onKeyDown={onKeyDown}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="none"
-            spellCheck={false}
-            enterKeyHint="go"
-            aria-describedby="terminal-hint"
-          />
+      <main className="terminal-screen">
+        <div className="scrollback" role="log" aria-live="polite" aria-label="Terminal output">
+          {entries.map((entry) => (
+            <OutputLine key={entry.id} entry={entry} />
+          ))}
         </div>
 
-        <div ref={bottomRef} />
+        <TerminalInput
+          value={value}
+          onChange={setValue}
+          onKeyDown={onKeyDown}
+          inputRef={inputRef}
+        />
+
+        <div className="scroll-anchor" ref={bottomRef} />
       </main>
 
-      <p id="terminal-hint" className="hint">
-        Try <code>/help</code> to list commands.
-      </p>
+      <footer className="dock">
+        <MobileShortcuts names={completionNames()} onRun={runFromShortcut} />
+        <p id="terminal-hint" className="hint">
+          New here? Start with <code>/about</code>, <code>/projects</code> or{' '}
+          <code>/contact</code>. <code>/help</code> lists everything.
+        </p>
+      </footer>
     </div>
   );
 }

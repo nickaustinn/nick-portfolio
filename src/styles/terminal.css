@@ -21,11 +21,22 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background: var(--green);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* ---- Frame ------------------------------------------------------------ */
+
 .terminal {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  padding: var(--gutter);
   cursor: text;
 }
 
@@ -34,11 +45,49 @@ body {
   width: 100%;
   max-width: var(--maxw);
   margin: 0 auto;
+  padding: var(--gutter) var(--gutter) 1rem;
 }
 
 .terminal p {
   margin: 0 0 0.35rem;
 }
+
+/* ---- Boot banner ------------------------------------------------------ */
+
+.banner {
+  margin-bottom: 1.5rem;
+}
+
+.banner-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 13vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--green-bright);
+  text-shadow: 0 0 14px var(--glow);
+}
+
+.banner-tagline {
+  margin: 0.35rem 0 1rem;
+  color: var(--green-dim);
+}
+
+/* Reserve the boot block's full height so nothing jumps as it types. */
+.banner-boot {
+  min-height: calc(4 * var(--lh) * 1em);
+}
+
+.boot-line {
+  margin: 0;
+  color: var(--green-dim);
+}
+
+.banner-cta {
+  margin-top: 0.75rem;
+}
+
+/* ---- Scrollback ------------------------------------------------------- */
 
 .entry {
   margin-bottom: 1rem;
@@ -62,26 +111,132 @@ body {
   user-select: none;
 }
 
+/* ---- Prompt line and block cursor ------------------------------------- */
+
 .input-line {
   display: flex;
   align-items: baseline;
   gap: 0.5ch;
 }
 
-.input {
+.input-wrap {
+  position: relative;
   flex: 1;
   min-width: 0;
+  /* Clips the overflow of a long line so the page itself never scrolls. */
+  overflow: hidden;
+}
+
+/* The real input sits on top and owns typing, selection and the mobile
+   keyboard. Its own text and caret are invisible — the mirror draws them. */
+.input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--green-bright);
+  color: transparent;
+  caret-color: transparent;
   font: inherit;
-  caret-color: var(--green);
+  white-space: pre;
 }
 
 .input:focus {
   outline: none;
 }
+
+.input-mirror {
+  position: absolute;
+  inset: 0;
+  white-space: pre;
+  pointer-events: none;
+  color: var(--green-bright);
+}
+
+.cursor {
+  background: var(--green);
+  color: var(--bg);
+  animation: blink 1.06s step-end infinite;
+}
+
+/* Unfocused: an outline, so it's clear the terminal isn't listening. */
+.cursor--idle {
+  animation: none;
+  background: transparent;
+  color: var(--green-bright);
+  box-shadow: inset 0 0 0 1px var(--green-dim);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    background: var(--green);
+    color: var(--bg);
+  }
+  50.01%,
+  100% {
+    background: transparent;
+    color: var(--green-bright);
+  }
+}
+
+/* ---- Dock: shortcuts + standing hint ---------------------------------- */
+
+.dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.6rem var(--gutter) 0.75rem;
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+}
+
+.shortcuts,
+.hint {
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.shortcut-list {
+  display: flex;
+  gap: 0.5ch;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  list-style: none;
+  /* Scrolls within itself on a narrow phone; the page stays put. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.shortcut-list::-webkit-scrollbar {
+  display: none;
+}
+
+.shortcut {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--green);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.shortcut:hover,
+.shortcut:focus-visible {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--bg);
+}
+
+.hint {
+  color: var(--green-dim);
+  margin-bottom: 0;
+}
+
+/* ---- Shared text ------------------------------------------------------ */
 
 .muted {
   color: var(--green-dim);
@@ -101,55 +256,6 @@ strong {
   font-weight: 700;
 }
 
-/* ---- /help listing ---------------------------------------------------- */
-
-.help-table {
-  margin: 0.5rem 0;
-}
-
-.help-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 1.5ch;
-}
-
-.help-name {
-  color: var(--green-bright);
-  flex: 0 0 18ch;
-}
-
-.help-desc {
-  margin: 0;
-  flex: 1 1 22ch;
-  color: var(--green-dim);
-}
-
-/* ---- Recruiter-facing hint ------------------------------------------- */
-
-.hint {
-  max-width: var(--maxw);
-  margin: 1.5rem auto 0;
-  color: var(--green-dim);
-}
-
-/* ---- Utilities -------------------------------------------------------- */
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* ---- Command output blocks --------------------------------------------
-   Structural only — spacing and hierarchy so output is readable. The CRT
-   treatment, cursor and animations land in Phase 3.
-   ---------------------------------------------------------------------- */
-
 .output-heading {
   margin: 0 0 0.15rem;
   font-size: 1rem;
@@ -168,7 +274,7 @@ strong {
   text-decoration: none;
 }
 
-/* Contact links */
+/* ---- Contact links ---------------------------------------------------- */
 
 .link-list {
   margin: 0.5rem 0;
@@ -187,7 +293,7 @@ strong {
   color: var(--green-dim);
 }
 
-/* Skills */
+/* ---- Skills ----------------------------------------------------------- */
 
 .skill-groups {
   margin: 0.25rem 0;
@@ -210,13 +316,13 @@ strong {
   margin: 0;
 }
 
-/* Timeline — /school and /experience */
+/* ---- Timeline: /school and /experience -------------------------------- */
 
 .timeline {
   margin: 0.25rem 0;
   padding-left: 2ch;
   list-style: none;
-  border-left: 1px solid var(--green-dim);
+  border-left: 1px solid var(--rule);
 }
 
 .timeline-item {
@@ -252,7 +358,7 @@ strong {
   padding-left: 2ch;
 }
 
-/* Projects */
+/* ---- Projects --------------------------------------------------------- */
 
 .project-list {
   margin: 0;
@@ -282,4 +388,69 @@ strong {
   display: flex;
   flex-wrap: wrap;
   gap: 0 2ch;
+}
+
+/* ---- /help listing ---------------------------------------------------- */
+
+.help-table {
+  margin: 0.5rem 0;
+}
+
+.help-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+}
+
+.help-name {
+  color: var(--green-bright);
+  flex: 0 0 18ch;
+}
+
+.help-desc {
+  margin: 0;
+  flex: 1 1 22ch;
+  color: var(--green-dim);
+}
+
+/* ---- Utilities -------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- Motion ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Stop mid-blink on the solid block rather than on the blank half. */
+  .cursor {
+    animation: none;
+    background: var(--green);
+    color: var(--bg);
+  }
+}
+
+/* Keeps the prompt clear of the sticky dock when the view scrolls to the
+   newest output. */
+html {
+  scroll-padding-bottom: 8rem;
+}
+
+.scroll-anchor {
+  scroll-margin-bottom: 8rem;
 }
