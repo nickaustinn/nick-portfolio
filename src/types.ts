@@ -38,3 +38,52 @@ export interface Command {
   hidden?: boolean;
   run(ctx: CommandContext): CommandResult;
 }
+
+/* =========================================================================
+   Content shapes. Everything below is data-only — the files in src/data
+   are the single source of truth and no component holds its own copy.
+   ========================================================================= */
+
+export interface Project {
+  /** URL-ish handle used by `/projects <slug>`. Lowercase, no spaces. */
+  slug: string;
+  name: string;
+  description: string;
+  tech: string[];
+  /** Deployed site. null when there isn't one — no dead links get rendered. */
+  liveUrl: string | null;
+  /** Repository. null when private or not published. */
+  sourceUrl: string | null;
+  /** Hidden from /projects until the entry is filled in. */
+  draft?: boolean;
+}
+
+export interface SkillGroup {
+  category: string;
+  skills: string[];
+}
+
+export interface SchoolEntry {
+  institution: string;
+  credential: string;
+  /** e.g. '2022 — 2026'. null when the dates aren't recorded yet. */
+  period: string | null;
+  /** Coursework, honors, focus areas. Empty array renders nothing. */
+  highlights: string[];
+}
+
+export interface ExperienceEntry {
+  organization: string;
+  role: string;
+  period: string | null;
+  bullets: string[];
+}
+
+export interface ContactLink {
+  label: string;
+  /** What's shown to the reader, e.g. 'github.com/nickaustinn'. */
+  value: string;
+  href: string;
+  /** Opens in a new tab with rel=noopener. */
+  external: boolean;
+}

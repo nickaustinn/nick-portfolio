@@ -144,3 +144,142 @@ strong {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ---- Command output blocks --------------------------------------------
+   Structural only — spacing and hierarchy so output is readable. The CRT
+   treatment, cursor and animations land in Phase 3.
+   ---------------------------------------------------------------------- */
+
+.output-heading {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.link {
+  color: var(--green-bright);
+  text-underline-offset: 3px;
+}
+
+.link:hover,
+.link:focus-visible {
+  background: var(--green);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+/* Contact links */
+
+.link-list {
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+}
+
+.link-label {
+  flex: 0 0 10ch;
+  color: var(--green-dim);
+}
+
+/* Skills */
+
+.skill-groups {
+  margin: 0.25rem 0;
+}
+
+.skill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+  margin-bottom: 0.25rem;
+}
+
+.skill-category {
+  flex: 0 0 24ch;
+  color: var(--green-bright);
+}
+
+.skill-list {
+  flex: 1 1 24ch;
+  margin: 0;
+}
+
+/* Timeline — /school and /experience */
+
+.timeline {
+  margin: 0.25rem 0;
+  padding-left: 2ch;
+  list-style: none;
+  border-left: 1px solid var(--green-dim);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.timeline-item::before {
+  content: '+';
+  position: absolute;
+  left: -2.55ch;
+  color: var(--green-dim);
+}
+
+.timeline-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.timeline-period {
+  color: var(--green-dim);
+  font-weight: 400;
+}
+
+.timeline-subtitle {
+  margin: 0;
+  color: var(--green-dim);
+}
+
+.timeline-bullets {
+  margin: 0.25rem 0 0;
+  padding-left: 2ch;
+}
+
+/* Projects */
+
+.project-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project {
+  margin-bottom: 1.25rem;
+}
+
+.project-name {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.project-desc {
+  margin: 0.15rem 0;
+}
+
+.project-tech-label {
+  color: var(--green-dim);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
+}

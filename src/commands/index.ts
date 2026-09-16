@@ -1,12 +1,29 @@
 import type { Command } from '../types';
 import { help } from './help';
+import { about } from './about';
+import { projects } from './projects';
+import { school } from './school';
+import { skills } from './skills';
+import { experienceCommand } from './experience';
+import { contact } from './contact';
+import { resume } from './resume';
 import { clear } from './clear';
 
 /**
- * The registry. Adding a command = importing it and dropping it in this list.
- * Order here is the order /help prints.
+ * The registry. Adding a command = adding a file, importing it, and dropping
+ * it in this list. Order here is the order /help prints.
  */
-export const commands: Command[] = [help, clear];
+export const commands: Command[] = [
+  help,
+  about,
+  projects,
+  school,
+  skills,
+  experienceCommand,
+  contact,
+  resume,
+  clear,
+];
 
 /** Name -> command, including aliases. Built once at module load. */
 const byName = new Map<string, Command>();
