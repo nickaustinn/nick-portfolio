@@ -35,12 +35,12 @@ export const contactLinks: ContactLink[] = [
  * decided by this one line: swapping in a new PDF means dropping it in
  * public/ and changing the name here, and nothing else.
  */
-export const RESUME_FILE = 'Nick_Austin___Resume (1).pdf';
+export const RESUME_FILE = 'NickAustinResume.pdf';
 
 /**
  * Where the file is served. Vite copies /public to the site root verbatim, so
- * the URL is just the filename; encodeURI covers the space and parentheses
- * the current filename happens to carry.
+ * the URL is just the filename. encodeURI is there for the day the filename
+ * picks up a space or a bracket, not for the current one.
  */
 export const resumeUrl = `/${encodeURI(RESUME_FILE)}`;
 
@@ -48,4 +48,4 @@ export const resumeUrl = `/${encodeURI(RESUME_FILE)}`;
  * What the browser saves it as. Set on the download link, so the visitor gets
  * a cleanly named file whatever the file in /public is called.
  */
-export const RESUME_DOWNLOAD_NAME = 'Nick_Austin_Resume.pdf';
+export const RESUME_DOWNLOAD_NAME = 'NickAustinResume.pdf';
