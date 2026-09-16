@@ -75,7 +75,12 @@ export interface SchoolEntry {
 export interface ExperienceEntry {
   organization: string;
   role: string;
-  period: string | null;
+  /** e.g. 'Stockton, CA'. null when it isn't worth showing, like remote work. */
+  location: string | null;
+  /** Start date, e.g. 'June 2026'. null hides the dates entirely. */
+  start: string | null;
+  /** End date. null means the role is current and renders as 'Present'. */
+  end: string | null;
   bullets: string[];
 }
 

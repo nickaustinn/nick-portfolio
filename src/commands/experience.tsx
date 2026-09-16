@@ -1,6 +1,17 @@
-import type { Command } from '../types';
+import type { Command, ExperienceEntry } from '../types';
 import { experience } from '../data/experience';
 import Timeline from '../components/blocks/Timeline';
+
+/** 'June 2026 - Present' for an ongoing role, null when there are no dates. */
+function formatPeriod({ start, end }: ExperienceEntry): string | null {
+  if (start === null) return null;
+  return `${start} - ${end ?? 'Present'}`;
+}
+
+/** The role, with the location alongside it when there is one. */
+function formatRole({ role, location }: ExperienceEntry): string {
+  return location === null ? role : `${role} · ${location}`;
+}
 
 export const experienceCommand: Command = {
   name: 'experience',
@@ -22,8 +33,8 @@ export const experienceCommand: Command = {
         <Timeline
           items={experience.map((entry) => ({
             title: entry.organization,
-            subtitle: entry.role,
-            period: entry.period,
+            subtitle: formatRole(entry),
+            period: formatPeriod(entry),
             bullets: entry.bullets,
           }))}
         />
