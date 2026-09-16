@@ -1,0 +1,25 @@
+/* =========================================================================
+   Design tokens. Phase 1 keeps these deliberately plain; Phase 3 layers the
+   CRT treatment on top without touching anything outside this file and
+   crt.css.
+   ========================================================================= */
+
+:root {
+  --bg: #000000;
+  --green: #33ff33;
+  --green-dim: #1f9c1f;
+  --green-bright: #a9ffa9;
+  --red: #ff5f56;
+
+  /* VT323 is a pixel font and reads well large and short — banners and
+     headings only. Long output stays in JetBrains Mono. */
+  --font-display: 'VT323', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  --fs-base: 1rem;
+  --lh: 1.6;
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --maxw: 900px;
+}
