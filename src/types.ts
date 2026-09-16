@@ -81,7 +81,8 @@ export interface ExperienceEntry {
   start: string | null;
   /** End date. null means the role is current and renders as 'Present'. */
   end: string | null;
-  bullets: string[];
+  /** What the role amounted to. Omitted or empty renders nothing. */
+  bullets?: string[];
 }
 
 export interface ContactLink {

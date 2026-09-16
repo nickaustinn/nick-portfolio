@@ -363,7 +363,23 @@ strong {
 
 .timeline-bullets {
   margin: 0.25rem 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* The dash sits in the gutter the padding reserves, so a bullet that wraps
+   hangs under its own first word rather than under the marker. */
+.timeline-bullets li {
+  position: relative;
   padding-left: 2ch;
+  overflow-wrap: anywhere;
+}
+
+.timeline-bullets li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: var(--green-dim);
 }
 
 /* ---- Projects --------------------------------------------------------- */

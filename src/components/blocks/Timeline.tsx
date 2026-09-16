@@ -5,7 +5,8 @@ export interface TimelineItem {
   subtitle: string;
   /** Rendered only when present — a null period shows no dates at all. */
   period: string | null;
-  bullets: string[];
+  /** Optional, so an entry with nothing to say yet renders no list at all. */
+  bullets?: string[];
 }
 
 /**
@@ -23,7 +24,7 @@ export default function Timeline({ items }: { items: TimelineItem[] }) {
             {item.period && <span className="timeline-period"> · {item.period}</span>}
           </h3>
           <p className="timeline-subtitle">{item.subtitle}</p>
-          {item.bullets.length > 0 && (
+          {item.bullets && item.bullets.length > 0 && (
             <ul className="timeline-bullets">
               {item.bullets.map((bullet) => (
                 <li key={bullet}>{bullet}</li>
