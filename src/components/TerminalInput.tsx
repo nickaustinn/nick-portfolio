@@ -15,7 +15,7 @@ interface Props {
  * A real <input> handles typing, selection and mobile keyboards; its own text
  * and caret are transparent, and a mirrored copy underneath draws the blinking
  * block cursor. The mirror tracks `selectionStart`, so the block sits where
- * the caret actually is — including after arrow keys or a click mid-string.
+ * the caret actually is - including after arrow keys or a click mid-string.
  *
  * Both layers use `white-space: pre` and never wrap, and the mirror is
  * translated by the input's own scrollLeft, so the two can't drift apart on a

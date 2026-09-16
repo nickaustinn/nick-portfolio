@@ -1,16 +1,30 @@
 import type { Command, ExperienceEntry } from '../types';
-import { experience } from '../data/experience';
+import { additionalExperience, experience, roles } from '../data/experience';
 import Timeline from '../components/blocks/Timeline';
 
-/** 'June 2026 - Present' for an ongoing role, null when there are no dates. */
+/**
+ * 'June 2026 - Present' for an ongoing role, 'June 2020' for something that
+ * ran a single month, null when there are no dates.
+ */
 function formatPeriod({ start, end }: ExperienceEntry): string | null {
   if (start === null) return null;
+  if (end === start) return start;
   return `${start} - ${end ?? 'Present'}`;
 }
 
 /** The role, with the location alongside it when there is one. */
 function formatRole({ role, location }: ExperienceEntry): string {
   return location === null ? role : `${role} · ${location}`;
+}
+
+/** Entries to timeline items. Shared by the roles and the additional list. */
+function toItems(entries: ExperienceEntry[]) {
+  return entries.map((entry) => ({
+    title: entry.organization,
+    subtitle: formatRole(entry),
+    period: formatPeriod(entry),
+    bullets: entry.bullets,
+  }));
 }
 
 export const experienceCommand: Command = {
@@ -30,14 +44,15 @@ export const experienceCommand: Command = {
           </p>
         </>
       ) : (
-        <Timeline
-          items={experience.map((entry) => ({
-            title: entry.organization,
-            subtitle: formatRole(entry),
-            period: formatPeriod(entry),
-            bullets: entry.bullets,
-          }))}
-        />
+        <>
+          {roles.length > 0 && <Timeline items={toItems(roles)} />}
+          {additionalExperience.length > 0 && (
+            <>
+              <h3 className="output-subheading">additional experience</h3>
+              <Timeline items={toItems(additionalExperience)} />
+            </>
+          )}
+        </>
       ),
   }),
 };

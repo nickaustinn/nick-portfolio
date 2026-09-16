@@ -20,7 +20,7 @@ body::after {
   );
 }
 
-/* Vignette — the edges of a curved tube falling off. */
+/* Vignette - the edges of a curved tube falling off. */
 body::before {
   content: '';
   position: fixed;

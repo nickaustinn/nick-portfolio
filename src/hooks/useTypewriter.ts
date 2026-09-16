@@ -21,7 +21,7 @@ function sliceLines(lines: string[], budget: number): string[] {
 
 /**
  * Types out a block of lines. Fast by design, skipped by any keypress or tap,
- * and switched off entirely when the visitor asks for reduced motion — in
+ * and switched off entirely when the visitor asks for reduced motion - in
  * which case the full text is there on first paint.
  */
 export function useTypewriter(lines: string[]) {

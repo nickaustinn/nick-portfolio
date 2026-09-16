@@ -1,11 +1,11 @@
 /* =========================================================================
-   Design tokens — the single place colour, type and spacing are decided.
+   Design tokens - the single place colour, type and spacing are decided.
    ========================================================================= */
 
 :root {
   --bg: #000000;
 
-  /* #33ff33 on #000 is 15.3:1 — comfortably past WCAG AAA. --green-dim is
+  /* #33ff33 on #000 is 15.3:1 - comfortably past WCAG AAA. --green-dim is
      the dimmest value here and still clears 7:1, so muted text stays legible
      rather than decorative. */
   --green: #33ff33;

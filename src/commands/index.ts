@@ -55,3 +55,11 @@ export function resolveCommand(word: string): Command | undefined {
 export function completionNames(): string[] {
   return commands.filter((c) => !c.hidden).map((c) => c.name);
 }
+
+/**
+ * Values Tab completes for the first argument of `word`, e.g. project slugs
+ * after `/projects `. Empty when the command takes free text, or none at all.
+ */
+export function argumentCompletions(word: string): string[] {
+  return resolveCommand(word)?.completions?.() ?? [];
+}
