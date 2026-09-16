@@ -1,0 +1,480 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  line-height: var(--lh);
+  /* A terminal never scrolls sideways. */
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--green);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* ---- Frame ------------------------------------------------------------ */
+
+.terminal {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: text;
+}
+
+.terminal-screen {
+  flex: 1;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--gutter) var(--gutter) 1rem;
+}
+
+.terminal p {
+  margin: 0 0 0.35rem;
+}
+
+/* ---- Boot banner ------------------------------------------------------ */
+
+.banner {
+  margin-bottom: 1.5rem;
+}
+
+.banner-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 13vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--green-bright);
+  text-shadow: 0 0 14px var(--glow);
+}
+
+.banner-tagline {
+  margin: 0.35rem 0 1rem;
+  color: var(--green-dim);
+}
+
+/* Reserve the boot block's full height so nothing jumps as it types. */
+.banner-boot {
+  min-height: calc(4 * var(--lh) * 1em);
+}
+
+.boot-line {
+  margin: 0;
+  color: var(--green-dim);
+}
+
+.banner-cta {
+  margin-top: 0.75rem;
+}
+
+/* ---- Boot sequence ---------------------------------------------------- */
+
+.boot-loading {
+  margin: 0;
+  color: var(--green);
+}
+
+.boot-welcome {
+  margin: 0;
+  color: var(--green-bright);
+}
+
+/* ---- Scrollback ------------------------------------------------------- */
+
+.entry {
+  margin-bottom: 1rem;
+}
+
+.entry-command {
+  /* Long commands wrap instead of pushing the page wide. */
+  overflow-wrap: anywhere;
+}
+
+.entry-input {
+  color: var(--green-bright);
+}
+
+.entry-output {
+  margin-top: 0.35rem;
+}
+
+.prompt {
+  color: var(--green-dim);
+  user-select: none;
+}
+
+/* ---- Prompt line and block cursor ------------------------------------- */
+
+.input-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5ch;
+}
+
+.input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  /* Clips the overflow of a long line so the page itself never scrolls. */
+  overflow: hidden;
+}
+
+/* The real input sits on top and owns typing, selection and the mobile
+   keyboard. Its own text and caret are invisible — the mirror draws them. */
+.input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font: inherit;
+  white-space: pre;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input-mirror {
+  position: absolute;
+  inset: 0;
+  white-space: pre;
+  pointer-events: none;
+  color: var(--green-bright);
+}
+
+.cursor {
+  background: var(--green);
+  color: var(--bg);
+  animation: blink 1.06s step-end infinite;
+}
+
+/* Unfocused: an outline, so it's clear the terminal isn't listening. */
+.cursor--idle {
+  animation: none;
+  background: transparent;
+  color: var(--green-bright);
+  box-shadow: inset 0 0 0 1px var(--green-dim);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    background: var(--green);
+    color: var(--bg);
+  }
+  50.01%,
+  100% {
+    background: transparent;
+    color: var(--green-bright);
+  }
+}
+
+/* ---- Dock: standing hint ---------------------------------------------- */
+
+.dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.6rem var(--gutter) 0.75rem;
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+}
+
+.hint {
+  max-width: var(--maxw);
+  /* `0 auto` also drops the paragraph's default bottom margin, so the dock's
+     own padding is the only space below the text. */
+  margin: 0 auto;
+  color: var(--green-dim);
+  /* Keeps the last line of the hint clear of the user-id badge, which is
+     pinned over this row. Matches --user-id-reserve. */
+  padding-right: var(--user-id-reserve);
+}
+
+/* ---- User ID badge ---------------------------------------------------- */
+
+/* Sits on the dock's hint row rather than in the true corner, so it reads as
+   part of the chrome and can't cover the input or the output, both of which
+   are above it. z-index clears the sticky dock (10). */
+.user-id {
+  position: fixed;
+  right: var(--gutter);
+  bottom: 0.75rem;
+  z-index: 11;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--green-dim);
+  opacity: 0.75;
+  user-select: none;
+  /* Decoration only: never swallow a tap meant for the dock beneath it. */
+  pointer-events: none;
+}
+
+@media (max-width: 30rem) {
+  .user-id {
+    right: calc(var(--gutter) / 2);
+    bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ---- Shared text ------------------------------------------------------ */
+
+.muted {
+  color: var(--green-dim);
+}
+
+.error {
+  color: var(--red);
+}
+
+code {
+  font: inherit;
+  color: var(--green-bright);
+}
+
+strong {
+  color: var(--green-bright);
+  font-weight: 700;
+}
+
+.output-heading {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.link {
+  color: var(--green-bright);
+  text-underline-offset: 3px;
+}
+
+.link:hover,
+.link:focus-visible {
+  background: var(--green);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+/* ---- Contact links ---------------------------------------------------- */
+
+.link-list {
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+}
+
+.link-label {
+  flex: 0 0 10ch;
+  color: var(--green-dim);
+}
+
+/* ---- Skills ----------------------------------------------------------- */
+
+.skill-groups {
+  margin: 0.25rem 0;
+}
+
+.skill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+  margin-bottom: 0.25rem;
+}
+
+.skill-category {
+  flex: 0 0 24ch;
+  color: var(--green-bright);
+}
+
+.skill-list {
+  flex: 1 1 24ch;
+  margin: 0;
+}
+
+/* ---- Timeline: /school and /experience -------------------------------- */
+
+.timeline {
+  margin: 0.25rem 0;
+  padding-left: 2ch;
+  list-style: none;
+  border-left: 1px solid var(--rule);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.timeline-item::before {
+  content: '+';
+  position: absolute;
+  left: -2.55ch;
+  color: var(--green-dim);
+}
+
+.timeline-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.timeline-period {
+  color: var(--green-dim);
+  font-weight: 400;
+}
+
+.timeline-subtitle {
+  margin: 0;
+  color: var(--green-dim);
+}
+
+.timeline-bullets {
+  margin: 0.25rem 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* The dash sits in the gutter the padding reserves, so a bullet that wraps
+   hangs under its own first word rather than under the marker. */
+.timeline-bullets li {
+  position: relative;
+  padding-left: 2ch;
+  overflow-wrap: anywhere;
+}
+
+.timeline-bullets li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: var(--green-dim);
+}
+
+/* ---- Projects --------------------------------------------------------- */
+
+.project-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project {
+  margin-bottom: 1.25rem;
+}
+
+.project-name {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--green-bright);
+}
+
+.project-desc {
+  margin: 0.15rem 0;
+}
+
+.project-tech-label {
+  color: var(--green-dim);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
+}
+
+/* ---- /commands listing ---------------------------------------------------- */
+
+.help-table {
+  margin: 0.5rem 0;
+}
+
+.help-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5ch;
+}
+
+.help-name {
+  color: var(--green-bright);
+  flex: 0 0 18ch;
+}
+
+.help-desc {
+  margin: 0;
+  flex: 1 1 22ch;
+  color: var(--green-dim);
+}
+
+/* ---- Utilities -------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- Motion ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Stop mid-blink on the solid block rather than on the blank half. */
+  .cursor {
+    animation: none;
+    background: var(--green);
+    color: var(--bg);
+  }
+}
+
+/* Keeps the prompt clear of the sticky dock when the view scrolls to the
+   newest output. */
+html {
+  scroll-padding-bottom: 5.5rem;
+}
+
+.scroll-anchor {
+  scroll-margin-bottom: 5.5rem;
+}

@@ -1,0 +1,35 @@
+/* =========================================================================
+   Design tokens — the single place colour, type and spacing are decided.
+   ========================================================================= */
+
+:root {
+  --bg: #000000;
+
+  /* #33ff33 on #000 is 15.3:1 — comfortably past WCAG AAA. --green-dim is
+     the dimmest value here and still clears 7:1, so muted text stays legible
+     rather than decorative. */
+  --green: #33ff33;
+  --green-dim: #4f9f4f;
+  --green-bright: #b6ffb6;
+  --red: #ff6b61;
+
+  --rule: rgba(51, 255, 51, 0.22);
+  --glow: rgba(51, 255, 51, 0.45);
+
+  /* VT323 is a pixel font: superb large and short, tiring at paragraph
+     length. It gets the banner and nothing else; all running text is
+     JetBrains Mono. */
+  --font-display: 'VT323', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  --fs-base: 1rem;
+  --lh: 1.6;
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --maxw: 900px;
+
+  /* Width the dock's hint text keeps free for the user-id badge pinned over
+     it, so the two never collide at any viewport width. */
+  --user-id-reserve: 10ch;
+}
