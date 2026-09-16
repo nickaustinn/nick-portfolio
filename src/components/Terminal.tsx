@@ -109,7 +109,7 @@ export default function Terminal() {
           if (matches.length > 1) {
             append({
               input: value,
-              node: <p className="muted">{matches.map((m) => `/${m}`).join('   ')}</p>,
+              node: <p className="muted">{matches.join('   ')}</p>,
             });
           }
           return;
@@ -122,7 +122,7 @@ export default function Terminal() {
     [append, complete, history, run, value],
   );
 
-  // Clicking the page focuses the input — except when the click was meant for
+  // Clicking the page focuses the input - except when the click was meant for
   // a link or button, or the visitor is selecting text to copy.
   const focusInput = useCallback((event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest('a, button')) return;
@@ -135,7 +135,7 @@ export default function Terminal() {
   }, [entries]);
 
   // The loading line hands over to the welcome message, which is scrollback
-  // like any other output — so /clear wipes it, and the live region announces
+  // like any other output - so /clear wipes it, and the live region announces
   // it. The ref keeps StrictMode's second mount from printing it twice.
   const welcomed = useRef(false);
   useEffect(() => {

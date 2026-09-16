@@ -3,14 +3,37 @@ import type { SkillGroup } from '../types';
 export const skillGroups: SkillGroup[] = [
   {
     category: 'Languages',
-    skills: ['Java', 'C++', 'Python'],
+    skills: ['Java', 'Python', 'TypeScript', 'JavaScript', 'SQL', 'C++', 'R'],
   },
   {
-    category: 'Frameworks & Libraries',
-    skills: ['React', 'Node.js', 'NumPy', 'scikit-learn'],
+    category: 'Frameworks & Tools',
+    skills: [
+      'React',
+      'Next.js',
+      'three.js',
+      'Prisma ORM',
+      'Supabase',
+      'Git',
+      'GitHub',
+      'Gazepoint API',
+    ],
   },
   {
-    category: 'Tools & Platforms',
-    skills: ['Git', 'VS Code', 'IntelliJ', 'Mapbox', 'REST APIs'],
+    category: 'Data & Analytics',
+    skills: ['pandas', 'NumPy', 'Matplotlib', 'scikit-learn', 'PostgreSQL', 'SQLite', 'Excel'],
+  },
+  {
+    category: 'Platforms & IDEs',
+    skills: [
+      'VS Code',
+      'IntelliJ',
+      'PyCharm',
+      'Android Studio',
+      'Figma',
+      'Wireshark',
+      'Vercel',
+      'Yodeck',
+      'WordPress',
+    ],
   },
 ];

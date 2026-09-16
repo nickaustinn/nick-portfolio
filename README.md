@@ -42,7 +42,7 @@ file in `src/data/`. You never need to open a component.
 | File | Holds |
 | --- | --- |
 | `profile.ts` | Name, tagline, the `/about` paragraphs, availability line |
-| `projects.ts` | Every project: slug, description, tech, links |
+| `projects.ts` | Every project: slug, date, tech, highlights, links |
 | `skills.ts` | Skill groups |
 | `education.ts` | `/school` timeline |
 | `experience.ts` | `/experience` timeline |
@@ -50,7 +50,7 @@ file in `src/data/`. You never need to open a component.
 
 Some conventions worth knowing:
 
-- **Links are null when they don't exist.** A project with `sourceUrl: null`
+- **Links are null when they don't exist.** A project with `github: null`
   renders no source link at all, so the site can never show a dead one.
 - **`draft: true` hides a project** from `/projects` until it's ready.
 - **`period: null` renders no dates**, rather than a visible placeholder.

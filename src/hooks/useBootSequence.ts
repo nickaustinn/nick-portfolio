@@ -16,7 +16,7 @@ export const REDUCED_MOTION_DURATION_MS = 1000;
 /** The dot frames, cycled in order: . -> .. -> ... -> . */
 const DOT_FRAMES = ['.', '..', '...'];
 
-/** What reduced motion shows instead of the cycle — static, never animated. */
+/** What reduced motion shows instead of the cycle - static, never animated. */
 const STATIC_DOTS = '...';
 
 export interface BootSequence {
@@ -30,7 +30,7 @@ export interface BootSequence {
  * The first-load sequence: a "Loading" line with cycling dots, then the
  * welcome message and a usable prompt.
  *
- * It runs on every full page load — deliberately not remembered in storage,
+ * It runs on every full page load - deliberately not remembered in storage,
  * so the sequence is part of arriving rather than a one-time gate.
  *
  * Only a mouse press skips it. Keys are ignored (the input isn't mounted yet,

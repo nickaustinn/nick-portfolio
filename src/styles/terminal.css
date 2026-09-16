@@ -140,7 +140,7 @@ body {
 }
 
 /* The real input sits on top and owns typing, selection and the mobile
-   keyboard. Its own text and caret are invisible — the mirror draws them. */
+   keyboard. Its own text and caret are invisible - the mirror draws them. */
 .input {
   position: relative;
   z-index: 1;
@@ -301,6 +301,12 @@ strong {
   color: var(--green-dim);
 }
 
+/* On a narrow screen the label and link stack; a long handle wraps rather
+   than pushing the row wide. */
+.link-list a {
+  overflow-wrap: anywhere;
+}
+
 /* ---- Skills ----------------------------------------------------------- */
 
 .skill-groups {
@@ -359,6 +365,7 @@ strong {
 .timeline-subtitle {
   margin: 0;
   color: var(--green-dim);
+  overflow-wrap: anywhere;
 }
 
 .timeline-bullets {
@@ -382,6 +389,17 @@ strong {
   color: var(--green-dim);
 }
 
+/* ---- Section headings within output ----------------------------------- */
+
+/* Sits between two timelines in /experience, so it needs air above it and
+   almost none below. */
+.output-subheading {
+  margin: 1rem 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--green-dim);
+}
+
 /* ---- Projects --------------------------------------------------------- */
 
 .project-list {
@@ -400,11 +418,44 @@ strong {
   color: var(--green-bright);
 }
 
-.project-desc {
+.project-date {
+  color: var(--green-dim);
+  font-weight: 400;
+}
+
+/* The label sits in the gutter the padding reserves, so a stack that wraps on
+   a narrow screen hangs clear of it rather than under it. */
+.project-tech {
   margin: 0.15rem 0;
+  padding-left: 6ch;
+  text-indent: -6ch;
+  overflow-wrap: anywhere;
 }
 
 .project-tech-label {
+  display: inline-block;
+  width: 5ch;
+  color: var(--green-dim);
+}
+
+/* Same hanging dash as the timeline bullets, so /projects <name> and
+   /experience read as one list style. */
+.project-highlights {
+  margin: 0.35rem 0 0.35rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.project-highlights li {
+  position: relative;
+  padding-left: 2ch;
+  overflow-wrap: anywhere;
+}
+
+.project-highlights li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
   color: var(--green-dim);
 }
 

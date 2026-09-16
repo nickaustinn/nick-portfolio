@@ -1,5 +1,5 @@
 import type { Command, Project } from '../types';
-import { publishedProjects } from '../data/projects';
+import { projectSlugs, publishedProjects } from '../data/projects';
 import ProjectCard from '../components/blocks/ProjectCard';
 
 /** Fold to bare letters and digits so 'A Way Out', 'a-way-out' and 'AWayOut' match. */
@@ -30,6 +30,8 @@ export const projects: Command = {
   description: 'Everything I’ve built. Add a name for the detail view.',
   usage: '/projects [name]',
   aliases: ['work-samples', 'portfolio'],
+  // Tab after `/projects ` offers the slugs.
+  completions: () => projectSlugs,
   run: ({ args }) => {
     const query = args.join(' ').trim();
 
@@ -42,7 +44,7 @@ export const projects: Command = {
             <>
               <p className="error">No project matches &ldquo;{query}&rdquo;.</p>
               <p className="muted">
-                Try: {publishedProjects.map((p) => p.slug).join(', ')}
+                Try: {projectSlugs.join(', ')}
               </p>
             </>
           ),

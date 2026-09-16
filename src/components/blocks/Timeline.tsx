@@ -3,7 +3,7 @@ export interface TimelineItem {
   title: string;
   /** Degree or role. */
   subtitle: string;
-  /** Rendered only when present — a null period shows no dates at all. */
+  /** Rendered only when present - a null period shows no dates at all. */
   period: string | null;
   /** Optional, so an entry with nothing to say yet renders no list at all. */
   bullets?: string[];

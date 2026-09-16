@@ -7,7 +7,7 @@ function randomUserId(): number {
 }
 
 /**
- * Drawn once, when the module is first evaluated — so the number is fixed for
+ * Drawn once, when the module is first evaluated - so the number is fixed for
  * the whole visit and only a full reload changes it. Module scope rather than
  * component state because StrictMode mounts twice in development, and state
  * from the discarded first mount is thrown away: the visitor would watch the

@@ -36,11 +36,16 @@ export interface Command {
   aliases?: string[];
   /** Kept out of the /commands listing. */
   hidden?: boolean;
+  /**
+   * Values Tab completes for this command's first argument, e.g. project
+   * slugs for `/projects <slug>`. Omitted when the argument is free text.
+   */
+  completions?: () => string[];
   run(ctx: CommandContext): CommandResult;
 }
 
 /* =========================================================================
-   Content shapes. Everything below is data-only — the files in src/data
+   Content shapes. Everything below is data-only - the files in src/data
    are the single source of truth and no component holds its own copy.
    ========================================================================= */
 
@@ -48,12 +53,15 @@ export interface Project {
   /** URL-ish handle used by `/projects <slug>`. Lowercase, no spaces. */
   slug: string;
   name: string;
-  description: string;
+  /** e.g. 'May 2026' or 'January 2026 - March 2026'. Shown in both views. */
+  date: string;
   tech: string[];
-  /** Deployed site. null when there isn't one — no dead links get rendered. */
-  liveUrl: string | null;
-  /** Repository. null when private or not published. */
-  sourceUrl: string | null;
+  /** What the project amounted to. Shown by the detail view only. */
+  highlights: string[];
+  /** Repository. null when private or not published - no dead link renders. */
+  github: string | null;
+  /** Deployed site or demo. null when there isn't one. */
+  demo: string | null;
   /** Hidden from /projects until the entry is filled in. */
   draft?: boolean;
 }
@@ -66,7 +74,9 @@ export interface SkillGroup {
 export interface SchoolEntry {
   institution: string;
   credential: string;
-  /** e.g. '2022 — 2026'. null when the dates aren't recorded yet. */
+  /** e.g. 'Stockton, CA'. null when it isn't worth showing. */
+  location: string | null;
+  /** e.g. 'Aug 2024 - May 2027 (expected)'. null when dates aren't recorded. */
   period: string | null;
   /** Coursework, honors, focus areas. Empty array renders nothing. */
   highlights: string[];
@@ -79,10 +89,18 @@ export interface ExperienceEntry {
   location: string | null;
   /** Start date, e.g. 'June 2026'. null hides the dates entirely. */
   start: string | null;
-  /** End date. null means the role is current and renders as 'Present'. */
+  /**
+   * End date. null means the role is current and renders as 'Present'. Equal
+   * to `start` for something that ran a single month, which prints once.
+   */
   end: string | null;
   /** What the role amounted to. Omitted or empty renders nothing. */
   bullets?: string[];
+  /**
+   * Grouped under an 'additional experience' heading rather than listed as a
+   * role in the main timeline. Camps, bootcamps, short programmes.
+   */
+  additional?: boolean;
 }
 
 export interface ContactLink {
