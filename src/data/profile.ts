@@ -15,6 +15,5 @@ export const profile = {
       'applied AI.',
   ],
   /** What /contact leads with. */
-  availability:
-    'Open to internships, new-grad roles, and interesting projects.',
+  availability: 'Open to roles, contact me here',
 } as const;
