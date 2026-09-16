@@ -34,13 +34,23 @@ for (const command of commands) {
   for (const alias of command.aliases ?? []) byName.set(alias, command);
 }
 
-/** Strip an optional leading slash and lowercase, so `/HELP` === `help`. */
-export function normalizeName(name: string): string {
-  return name.replace(/^\/+/, '').toLowerCase();
+/** Every command is typed with this in front of it. */
+export const COMMAND_PREFIX = '/';
+
+/** Whether a typed word is addressed to the terminal at all. */
+export function hasCommandPrefix(word: string): boolean {
+  return word.startsWith(COMMAND_PREFIX);
 }
 
-export function resolveCommand(name: string): Command | undefined {
-  return byName.get(normalizeName(name));
+/** Drop the leading slash and lowercase, so `/HELP` === `/help`. */
+export function normalizeName(name: string): string {
+  return name.replace(/^\//, '').toLowerCase();
+}
+
+/** Resolves only slash-prefixed words: a bare `help` is not a command. */
+export function resolveCommand(word: string): Command | undefined {
+  if (!hasCommandPrefix(word)) return undefined;
+  return byName.get(normalizeName(word));
 }
 
 /** Canonical names, used for Tab completion. */

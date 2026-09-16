@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { completionNames, normalizeName } from '../commands';
+import { COMMAND_PREFIX, completionNames, hasCommandPrefix, normalizeName } from '../commands';
 
 export interface Completion {
   /** The input value after completing. Unchanged when there's nothing to do. */
@@ -20,23 +20,23 @@ function commonPrefix(values: string[]): string {
 
 /**
  * Tab completion over command names. Only the command word completes; once
- * there's a space, the argument is the user's business.
+ * there's a space, the argument is the user's business. Nothing completes
+ * without the leading slash, since nothing runs without it either.
  */
 export function useAutocomplete() {
   return useCallback((input: string): Completion => {
     if (/\s/.test(input.trimStart())) return { value: input, matches: [] };
+    if (!hasCommandPrefix(input.trim())) return { value: input, matches: [] };
 
-    const hadSlash = input.trimStart().startsWith('/');
     const typed = normalizeName(input.trim());
     if (typed === '') return { value: input, matches: [] };
 
     const matches = completionNames().filter((name) => name.startsWith(typed));
     if (matches.length === 0) return { value: input, matches: [] };
 
-    const prefix = hadSlash ? '/' : '';
-    if (matches.length === 1) return { value: `${prefix}${matches[0]} `, matches: [] };
+    if (matches.length === 1) return { value: `${COMMAND_PREFIX}${matches[0]} `, matches: [] };
 
     // Ambiguous: fill in as far as everything agrees, then show the options.
-    return { value: `${prefix}${commonPrefix(matches)}`, matches };
+    return { value: `${COMMAND_PREFIX}${commonPrefix(matches)}`, matches };
   }, []);
 }

@@ -11,12 +11,8 @@ export function listCommands({ commands }: CommandContext): CommandResult {
     kind: 'output',
     node: (
       <>
-        <p className="muted">Available commands — type one, or click it.</p>
+        <p className="muted">Available commands — type one.</p>
         <HelpTable commands={commands.filter((c) => !c.hidden)} />
-        <p className="muted">
-          The leading slash is optional and case doesn&apos;t matter. Tab completes,
-          up and down arrows walk your history.
-        </p>
       </>
     ),
   };

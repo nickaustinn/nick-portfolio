@@ -88,7 +88,8 @@ Commands return React nodes, not strings, so output uses real markup — real
 `<a>` elements that tab and open normally, real headings and lists.
 
 Input handling is shared, so a new command automatically gets Tab completion,
-command history, the optional leading slash, and case-insensitivity.
+command history and case-insensitivity. Commands run only when typed with a
+leading slash: `/hello` works, `hello` does not.
 
 ## Accessibility
 

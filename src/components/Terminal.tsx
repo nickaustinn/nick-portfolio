@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
-import { commands, resolveCommand } from '../commands';
+import { commands, hasCommandPrefix, resolveCommand } from '../commands';
 import { useCommandHistory } from '../hooks/useCommandHistory';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useBootSequence } from '../hooks/useBootSequence';
@@ -53,7 +53,9 @@ export default function Terminal() {
           input: trimmed,
           node: (
             <p className="error">
-              command not found: {name}. Type <code>/commands</code>
+              command not found: {name}.{' '}
+              {!hasCommandPrefix(name) && <>Commands start with /. </>}
+              Type <code>/commands</code> to see the list.
             </p>
           ),
         });
