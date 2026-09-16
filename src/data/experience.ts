@@ -21,4 +21,12 @@ export const experience: ExperienceEntry[] = [
       'Translated technical concepts for stakeholders in meetings, gathering requirements and aligning deliverables with organizational needs',
     ],
   },
+  {
+    organization: 'iDTech',
+    role: 'Machine Learning Bootcamp',
+    location: null,
+    start: 'June 2020',
+    end: 'July 2020',
+    bullets: ['Neural networks', 'Image generation techniques', 'Machine learning concepts'],
+  },
 ];

@@ -14,11 +14,5 @@ export const education: SchoolEntry[] = [
       // TODO: relevant coursework, honors, GPA, clubs — whatever you want shown
     ],
   },
-  {
-    institution: 'iDTech',
-    credential: 'Machine Learning Bootcamp',
-    period: null, // TODO: when you attended
-    highlights: ['Neural networks and applied AI'],
-  },
   // TODO: earlier schooling, if you want it listed
 ];
