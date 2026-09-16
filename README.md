@@ -28,7 +28,7 @@ src/
   types.ts              Command contract + every content shape
   data/                 ALL CONTENT LIVES HERE — see below
   commands/             one file per command, plus index.ts (the registry)
-  components/           Terminal, banner, prompt line, shortcut dock
+  components/           Terminal, banner, prompt line, user-id badge
     blocks/             reusable output pieces (project card, timeline, links)
   hooks/                history, autocomplete, typewriter, reduced-motion
   styles/               tokens.css, terminal.css, crt.css
@@ -88,8 +88,7 @@ Commands return React nodes, not strings, so output uses real markup — real
 `<a>` elements that tab and open normally, real headings and lists.
 
 Input handling is shared, so a new command automatically gets Tab completion,
-command history, the optional leading slash, case-insensitivity, and a chip in
-the shortcut dock.
+command history, the optional leading slash, and case-insensitivity.
 
 ## Accessibility
 

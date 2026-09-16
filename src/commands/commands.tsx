@@ -4,7 +4,7 @@ import HelpTable from '../components/blocks/HelpTable';
 /**
  * The listing itself, shared so `/commands` and its alias `/help` can't drift
  * apart. Both names are registered as commands rather than one being a plain
- * alias, so both complete on Tab and both appear in the shortcut row.
+ * alias, so both complete on Tab.
  */
 export function listCommands({ commands }: CommandContext): CommandResult {
   return {

@@ -43,7 +43,7 @@ export function resolveCommand(name: string): Command | undefined {
   return byName.get(normalizeName(name));
 }
 
-/** Canonical names, used for Tab completion and the shortcut row. */
+/** Canonical names, used for Tab completion. */
 export function completionNames(): string[] {
   return commands.filter((c) => !c.hidden).map((c) => c.name);
 }

@@ -193,7 +193,7 @@ body {
   }
 }
 
-/* ---- Dock: shortcuts + standing hint ---------------------------------- */
+/* ---- Dock: standing hint ---------------------------------------------- */
 
 .dock {
   position: sticky;
@@ -204,48 +204,12 @@ body {
   border-top: 1px solid var(--rule);
 }
 
-.shortcuts,
 .hint {
   max-width: var(--maxw);
+  /* `0 auto` also drops the paragraph's default bottom margin, so the dock's
+     own padding is the only space below the text. */
   margin: 0 auto;
-}
-
-.shortcut-list {
-  display: flex;
-  gap: 0.5ch;
-  margin: 0;
-  padding: 0 0 0.5rem;
-  list-style: none;
-  /* Scrolls within itself on a narrow phone; the page stays put. */
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.shortcut-list::-webkit-scrollbar {
-  display: none;
-}
-
-.shortcut {
-  padding: 0.45rem 0.8rem;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--green);
-  font: inherit;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.shortcut:hover,
-.shortcut:focus-visible {
-  background: var(--green);
-  border-color: var(--green);
-  color: var(--bg);
-}
-
-.hint {
   color: var(--green-dim);
-  margin-bottom: 0;
   /* Keeps the last line of the hint clear of the user-id badge, which is
      pinned over this row. Matches --user-id-reserve. */
   padding-right: var(--user-id-reserve);
@@ -254,8 +218,8 @@ body {
 /* ---- User ID badge ---------------------------------------------------- */
 
 /* Sits on the dock's hint row rather than in the true corner, so it reads as
-   part of the chrome and can't cover the input, the output or the shortcut
-   chips — all of which are above it. z-index clears the sticky dock (10). */
+   part of the chrome and can't cover the input or the output, both of which
+   are above it. z-index clears the sticky dock (10). */
 .user-id {
   position: fixed;
   right: var(--gutter);
@@ -492,9 +456,9 @@ strong {
 /* Keeps the prompt clear of the sticky dock when the view scrolls to the
    newest output. */
 html {
-  scroll-padding-bottom: 8rem;
+  scroll-padding-bottom: 5.5rem;
 }
 
 .scroll-anchor {
-  scroll-margin-bottom: 8rem;
+  scroll-margin-bottom: 5.5rem;
 }

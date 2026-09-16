@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
-import { commands, completionNames, resolveCommand } from '../commands';
+import { commands, resolveCommand } from '../commands';
 import { useCommandHistory } from '../hooks/useCommandHistory';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useBootSequence } from '../hooks/useBootSequence';
 import OutputLine, { type Entry } from './OutputLine';
 import BootLine, { WELCOME_MESSAGE } from './BootLine';
 import TerminalInput from './TerminalInput';
-import MobileShortcuts from './MobileShortcuts';
 import UserIdBadge from './UserIdBadge';
 
 /** Only focus on load where there is a real keyboard. Auto-focusing on a phone
@@ -76,15 +75,6 @@ export default function Terminal() {
       }
     },
     [append, history],
-  );
-
-  /** A tapped shortcut chip behaves exactly like typing the command. */
-  const runFromShortcut = useCallback(
-    (name: string) => {
-      run(`/${name}`);
-      inputRef.current?.focus();
-    },
-    [run],
   );
 
   const onKeyDown = useCallback(
@@ -179,7 +169,6 @@ export default function Terminal() {
       </main>
 
       <footer className="dock">
-        <MobileShortcuts names={completionNames()} onRun={runFromShortcut} />
         <p id="terminal-hint" className="hint">
           New here? Start with <code>/about</code>, <code>/projects</code> or{' '}
           <code>/contact</code>. <code>/commands</code> lists everything.
