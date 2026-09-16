@@ -8,6 +8,7 @@ import OutputLine, { type Entry } from './OutputLine';
 import BootLine, { WELCOME_MESSAGE } from './BootLine';
 import TerminalInput from './TerminalInput';
 import MobileShortcuts from './MobileShortcuts';
+import UserIdBadge from './UserIdBadge';
 
 /** Only focus on load where there is a real keyboard. Auto-focusing on a phone
  *  throws up the on-screen keyboard before the visitor has read a word; there,
@@ -184,6 +185,10 @@ export default function Terminal() {
           <code>/contact</code>. <code>/commands</code> lists everything.
         </p>
       </footer>
+
+      {/* Outside the dock so the dock's own padding can't clip it, and outside
+          the boot branch so it is there from the first paint. */}
+      <UserIdBadge />
     </div>
   );
 }

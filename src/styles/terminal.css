@@ -246,6 +246,38 @@ body {
 .hint {
   color: var(--green-dim);
   margin-bottom: 0;
+  /* Keeps the last line of the hint clear of the user-id badge, which is
+     pinned over this row. Matches --user-id-reserve. */
+  padding-right: var(--user-id-reserve);
+}
+
+/* ---- User ID badge ---------------------------------------------------- */
+
+/* Sits on the dock's hint row rather than in the true corner, so it reads as
+   part of the chrome and can't cover the input, the output or the shortcut
+   chips — all of which are above it. z-index clears the sticky dock (10). */
+.user-id {
+  position: fixed;
+  right: var(--gutter);
+  bottom: 0.75rem;
+  z-index: 11;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--green-dim);
+  opacity: 0.75;
+  user-select: none;
+  /* Decoration only: never swallow a tap meant for the dock beneath it. */
+  pointer-events: none;
+}
+
+@media (max-width: 30rem) {
+  .user-id {
+    right: calc(var(--gutter) / 2);
+    bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* ---- Shared text ------------------------------------------------------ */
