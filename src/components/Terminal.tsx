@@ -3,21 +3,28 @@ import type { KeyboardEvent, MouseEvent } from 'react';
 import { commands, completionNames, resolveCommand } from '../commands';
 import { useCommandHistory } from '../hooks/useCommandHistory';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import { useBootSequence } from '../hooks/useBootSequence';
 import OutputLine, { type Entry } from './OutputLine';
+import BootLine, { WELCOME_MESSAGE } from './BootLine';
 import TerminalInput from './TerminalInput';
 import MobileShortcuts from './MobileShortcuts';
-import Banner from './Banner';
 
-const bootEntry = (): Entry => ({ id: 0, node: <Banner /> });
+/** Only focus on load where there is a real keyboard. Auto-focusing on a phone
+ *  throws up the on-screen keyboard before the visitor has read a word; there,
+ *  tapping the screen opens it. */
+function hasKeyboard(): boolean {
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
 
 export default function Terminal() {
-  const [entries, setEntries] = useState<Entry[]>(() => [bootEntry()]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [value, setValue] = useState('');
 
   const nextId = useRef(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const boot = useBootSequence();
   const history = useCommandHistory();
   const complete = useAutocomplete();
 
@@ -46,7 +53,7 @@ export default function Terminal() {
           input: trimmed,
           node: (
             <p className="error">
-              command not found: {name}. Type <code>/help</code>
+              command not found: {name}. Type <code>/commands</code>
             </p>
           ),
         });
@@ -134,30 +141,38 @@ export default function Terminal() {
     bottomRef.current?.scrollIntoView({ block: 'end' });
   }, [entries]);
 
-  // Focus on load only where there is a real keyboard. Auto-focusing on a
-  // phone throws up the on-screen keyboard before the visitor has read a
-  // word; there, tapping the screen opens it.
+  // The loading line hands over to the welcome message, which is scrollback
+  // like any other output — so /clear wipes it, and the live region announces
+  // it. The ref keeps StrictMode's second mount from printing it twice.
+  const welcomed = useRef(false);
   useEffect(() => {
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      inputRef.current?.focus();
-    }
-  }, []);
+    if (boot.loading || welcomed.current) return;
+    welcomed.current = true;
+    append({ node: <p className="boot-welcome">{WELCOME_MESSAGE}</p> });
+    if (hasKeyboard()) inputRef.current?.focus();
+  }, [append, boot.loading]);
 
   return (
     <div className="terminal" onClick={focusInput}>
       <main className="terminal-screen">
         <div className="scrollback" role="log" aria-live="polite" aria-label="Terminal output">
+          {boot.loading && <BootLine dots={boot.dots} />}
           {entries.map((entry) => (
             <OutputLine key={entry.id} entry={entry} />
           ))}
         </div>
 
-        <TerminalInput
-          value={value}
-          onChange={setValue}
-          onKeyDown={onKeyDown}
-          inputRef={inputRef}
-        />
+        {/* No prompt until the sequence finishes: leaving the input unmounted
+            is what makes it unusable, and means stray keypresses during the
+            wait land nowhere rather than being typed in and then discarded. */}
+        {!boot.loading && (
+          <TerminalInput
+            value={value}
+            onChange={setValue}
+            onKeyDown={onKeyDown}
+            inputRef={inputRef}
+          />
+        )}
 
         <div className="scroll-anchor" ref={bottomRef} />
       </main>
@@ -166,7 +181,7 @@ export default function Terminal() {
         <MobileShortcuts names={completionNames()} onRun={runFromShortcut} />
         <p id="terminal-hint" className="hint">
           New here? Start with <code>/about</code>, <code>/projects</code> or{' '}
-          <code>/contact</code>. <code>/help</code> lists everything.
+          <code>/contact</code>. <code>/commands</code> lists everything.
         </p>
       </footer>
     </div>

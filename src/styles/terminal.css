@@ -87,6 +87,18 @@ body {
   margin-top: 0.75rem;
 }
 
+/* ---- Boot sequence ---------------------------------------------------- */
+
+.boot-loading {
+  margin: 0;
+  color: var(--green);
+}
+
+.boot-welcome {
+  margin: 0;
+  color: var(--green-bright);
+}
+
 /* ---- Scrollback ------------------------------------------------------- */
 
 .entry {

@@ -1,4 +1,5 @@
 import type { Command } from '../types';
+import { commandsCommand } from './commands';
 import { help } from './help';
 import { about } from './about';
 import { projects } from './projects';
@@ -11,9 +12,10 @@ import { clear } from './clear';
 
 /**
  * The registry. Adding a command = adding a file, importing it, and dropping
- * it in this list. Order here is the order /help prints.
+ * it in this list. Order here is the order /commands prints.
  */
 export const commands: Command[] = [
+  commandsCommand,
   help,
   about,
   projects,
