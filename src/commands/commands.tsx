@@ -1,11 +1,7 @@
 import type { Command, CommandContext, CommandResult } from '../types';
 import HelpTable from '../components/blocks/HelpTable';
 
-/**
- * The listing itself, shared so `/commands` and its alias `/help` can't drift
- * apart. Both names are registered as commands rather than one being a plain
- * alias, so both complete on Tab.
- */
+/** The listing itself: one row per command that isn't hidden. */
 export function listCommands({ commands }: CommandContext): CommandResult {
   return {
     kind: 'output',

@@ -1,7 +1,7 @@
 import type { Command } from '../../types';
 
 /**
- * The /help listing: one row per command, name on the left, description on
+ * The /commands listing: one row per command, name on the left, description on
  * the right. A description list is the honest markup for name/definition
  * pairs, so screen readers announce the pairing rather than a wall of text.
  */

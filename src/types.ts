@@ -17,7 +17,7 @@ export interface CommandContext {
   args: string[];
   /** The line exactly as typed, for echoing or error messages. */
   raw: string;
-  /** The full registry, so a command like /help can describe its siblings. */
+  /** The full registry, so a command like /commands can describe its siblings. */
   commands: Command[];
 }
 
@@ -28,13 +28,13 @@ export interface CommandContext {
 export interface Command {
   /** Canonical name, lowercase, no leading slash. */
   name: string;
-  /** One line, shown by /help. */
+  /** One line, shown by /commands. */
   description: string;
-  /** Shown by /help when the command takes arguments, e.g. '/projects <name>'. */
+  /** Shown by /commands when the command takes arguments, e.g. '/projects <name>'. */
   usage?: string;
-  /** Alternate names that resolve here. Not listed in /help. */
+  /** Alternate names that resolve here. Not listed in /commands. */
   aliases?: string[];
-  /** Kept out of the /help listing. */
+  /** Kept out of the /commands listing. */
   hidden?: boolean;
   run(ctx: CommandContext): CommandResult;
 }

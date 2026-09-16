@@ -1,6 +1,5 @@
 import type { Command } from '../types';
 import { commandsCommand } from './commands';
-import { help } from './help';
 import { about } from './about';
 import { projects } from './projects';
 import { school } from './school';
@@ -16,7 +15,6 @@ import { clear } from './clear';
  */
 export const commands: Command[] = [
   commandsCommand,
-  help,
   about,
   projects,
   school,
@@ -42,12 +40,12 @@ export function hasCommandPrefix(word: string): boolean {
   return word.startsWith(COMMAND_PREFIX);
 }
 
-/** Drop the leading slash and lowercase, so `/HELP` === `/help`. */
+/** Drop the leading slash and lowercase, so `/COMMANDS` === `/commands`. */
 export function normalizeName(name: string): string {
   return name.replace(/^\//, '').toLowerCase();
 }
 
-/** Resolves only slash-prefixed words: a bare `help` is not a command. */
+/** Resolves only slash-prefixed words: a bare `commands` is not a command. */
 export function resolveCommand(word: string): Command | undefined {
   if (!hasCommandPrefix(word)) return undefined;
   return byName.get(normalizeName(word));
