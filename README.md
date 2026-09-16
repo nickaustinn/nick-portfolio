@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# nick-portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+My portfolio, built as a terminal. Visitors land on a boot screen and type
+commands — `/about`, `/projects`, `/contact` — to get around.
 
-## Available Scripts
+Green on black, VT323 for the banner, a blinking block cursor, light CRT
+scanlines. React + TypeScript on Vite, deployed on Vercel.
 
-In the project directory, you can run:
+## Running it
 
-### `npm start`
+```bash
+npm install
+npm run dev      # dev server with hot reload
+npm run build    # type-check, then production build to dist/
+npm run preview  # serve the production build locally
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+`npm run build` runs `tsc -b` before Vite, so a type error fails the build
+rather than reaching the browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Layout
 
-### `npm test`
+```
+index.html              entry document, meta tags, fonts
+vercel.json             build + SPA rewrite + asset caching
+src/
+  main.tsx              mounts the app, imports the three stylesheets
+  types.ts              Command contract + every content shape
+  data/                 ALL CONTENT LIVES HERE — see below
+  commands/             one file per command, plus index.ts (the registry)
+  components/           Terminal, banner, prompt line, shortcut dock
+    blocks/             reusable output pieces (project card, timeline, links)
+  hooks/                history, autocomplete, typewriter, reduced-motion
+  styles/               tokens.css, terminal.css, crt.css
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Editing content
 
-### `npm run build`
+Content is entirely separate from UI. To change what the site says, edit a
+file in `src/data/` — you never need to open a component.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| File | Holds |
+| --- | --- |
+| `profile.ts` | Name, tagline, the `/about` paragraphs, availability line |
+| `projects.ts` | Every project: slug, description, tech, links |
+| `skills.ts` | Skill groups |
+| `education.ts` | `/school` timeline |
+| `experience.ts` | `/experience` timeline |
+| `contact.ts` | Contact links and the resume URL |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Some conventions worth knowing:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Links are null when they don't exist.** A project with `sourceUrl: null`
+  renders no source link at all, so the site can never show a dead one.
+- **`draft: true` hides a project** from `/projects` until it's ready.
+- **`period: null` renders no dates**, rather than a visible placeholder.
+- **`resumeUrl: null`** makes `/resume` explain the PDF isn't posted and offer
+  the contact links instead of 404-ing. Drop a file at `public/resume.pdf` and
+  set `resumeUrl` to `'/resume.pdf'` to turn it on.
 
-### `npm run eject`
+## Adding a command
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Adding a command is one new file plus one line in the registry.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Create `src/commands/hello.tsx`:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```tsx
+   import type { Command } from '../types';
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   export const hello: Command = {
+     name: 'hello',
+     description: 'Say hello.',
+     aliases: ['hi'],          // optional, not listed in /help
+     usage: '/hello [name]',   // optional, shown by /help when set
+     run: ({ args }) => ({
+       kind: 'output',
+       node: <p>Hello, {args[0] ?? 'stranger'}.</p>,
+     }),
+   };
+   ```
 
-## Learn More
+2. Import it in `src/commands/index.ts` and add it to the `commands` array.
+   That array's order is the order `/help` prints.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+A handler returns `{ kind: 'output', node }` to print something,
+`{ kind: 'clear' }` to wipe the screen, or `{ kind: 'none' }` to print nothing.
+Commands return React nodes, not strings, so output uses real markup — real
+`<a>` elements that tab and open normally, real headings and lists.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Input handling is shared, so a new command automatically gets Tab completion,
+command history, the optional leading slash, case-insensitivity, and a chip in
+the shortcut dock.
 
-### Code Splitting
+## Accessibility
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Output is a `role="log"` / `aria-live="polite"` region, so results are
+  announced as they appear.
+- The prompt input has a real (visually hidden) label; links are real anchors
+  in tab order.
+- `#33ff33` on `#000` is 15.3:1, past WCAG AAA. The dimmest text still clears
+  7:1.
+- The boot typewriter is skipped by any keypress or tap, and disabled entirely
+  under `prefers-reduced-motion`. CRT scanlines are static and never animate.
+- Autofocus only happens where there's a real keyboard — on touch devices,
+  tapping opens the keyboard instead.
 
-### Analyzing the Bundle Size
+## Dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+`react` and `react-dom` at runtime; `vite`, `typescript` and the React plugin
+for the build. Nothing else. The terminal's history, autocomplete and output
+buffer are a few small hooks rather than a library.
 
-### Making a Progressive Web App
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Vercel, from `vercel.json`: `npm run build` into `dist/`, all paths rewritten
+to `index.html`, hashed assets cached for a year. Static files in `public/`
+(favicon, robots, a resume PDF) are served before the rewrite applies.
